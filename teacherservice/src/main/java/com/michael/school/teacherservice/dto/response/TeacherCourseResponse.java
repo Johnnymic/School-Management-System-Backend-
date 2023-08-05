@@ -1,16 +1,14 @@
 package com.michael.school.teacherservice.dto.response;
 
 import lombok.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class TeacherResponse {
+public class TeacherCourseResponse {
     private  Long id;
     private String firstName;
 
@@ -25,9 +23,5 @@ public class TeacherResponse {
     private String phoneNo;
 
     private String profilePic;
-
-    private  CourseResponse courseResponse;
-
-
-
+    private List<CourseResponse> courseResponses;
 }

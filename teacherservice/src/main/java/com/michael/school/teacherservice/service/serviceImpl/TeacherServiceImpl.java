@@ -2,6 +2,7 @@ package com.michael.school.teacherservice.service.serviceImpl;
 
 import com.michael.school.teacherservice.dto.request.TeacherRequest;
 import com.michael.school.teacherservice.dto.response.CourseResponse;
+import com.michael.school.teacherservice.dto.response.TeacherCourseResponse;
 import com.michael.school.teacherservice.dto.response.TeacherResponse;
 import com.michael.school.teacherservice.exception.TeacherNotFoundException;
 import com.michael.school.teacherservice.feign.CourseClient;
@@ -15,6 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -44,6 +48,17 @@ public class TeacherServiceImpl  implements TeacherService {
       CourseResponse addCourseResponse = courseResponse.getBody();
         log.info("coursReponse {}:" +courseResponse);
         teacherResponse.setCourseResponse(addCourseResponse);
+        return teacherResponse;
+    }
+
+    @Override
+    public TeacherCourseResponse viewAllByTeacherByCourse(Long id) {
+        Teacher teacher = teacherRepository.findById(id)
+                .orElseThrow(()-> new TeacherNotFoundException("TEACHER NOT FOUND "));
+        TeacherCourseResponse teacherResponse = modelMapper.map(teacher, TeacherCourseResponse.class);
+        ResponseEntity<List<CourseResponse>> courseResponseResponseEntity = courseClient.viewAllCourses();
+        List<CourseResponse> newCourseList = courseResponseResponseEntity.getBody();
+        teacherResponse.setCourseResponses(newCourseList);
         return teacherResponse;
     }
 
