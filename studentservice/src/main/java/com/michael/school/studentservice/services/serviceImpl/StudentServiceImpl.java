@@ -10,6 +10,7 @@ import com.michael.school.studentservice.repository.StudentRepository;
 import com.michael.school.studentservice.services.StudentService;
 import com.michael.school.studentservice.utilis.Mapper;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class StudentServiceImpl implements StudentService {
     private final WebClient webClient;
 
     private  final ModelMapper modelMapper;
+
+
 
 
     @Override
@@ -62,7 +65,7 @@ public class StudentServiceImpl implements StudentService {
                 .bodyToMono(CourseResponse.class)
                 .block();
         System.out.println(courseResponseMono);
-        log.info("course mono :" + courseResponseMono);
+        log.info("course :" + courseResponseMono);
         studentResponse.setCourseResponse(courseResponseMono);
         return studentResponse;
     }
