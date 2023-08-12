@@ -11,10 +11,13 @@ import com.michael.school.teacherservice.service.TeacherService;
 import com.michael.school.teacherservice.utili.TeacherMapper;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class TeacherServiceImpl  implements TeacherService {
 
@@ -37,8 +40,10 @@ public class TeacherServiceImpl  implements TeacherService {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(()-> new TeacherNotFoundException("TEACHER NOT FOUND "));
         TeacherResponse teacherResponse = modelMapper.map(teacher,TeacherResponse.class);
-        CourseResponse courseResponse = courseClient.getCourseByTeacherId(teacherId);
-        teacherResponse.setCourseResponse(courseResponse);
+       ResponseEntity<CourseResponse> courseResponse = courseClient.getCourseByTeacherId(teacherId);
+      CourseResponse addCourseResponse = courseResponse.getBody();
+        log.info("coursReponse {}:" +courseResponse);
+        teacherResponse.setCourseResponse(addCourseResponse);
         return teacherResponse;
     }
 
