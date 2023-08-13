@@ -9,10 +9,19 @@ import com.michael.school.courseservice.services.CourseService;
 import com.michael.school.courseservice.utilis.CourseMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.mapper.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +68,20 @@ public class CourseServiceImp implements CourseService {
                 .orElseThrow(()-> new CourseNotFoundException("course not found"));
         courseRepository.delete(course);
         return "course deleted successfully";
+    }
+
+    @Override
+    public Page<CourseResponse> viewAllPaginatedCourse(Integer pageNo, Integer pageSize, String sortBy) {
+        List<Course> fetchAllCourse = courseRepository.findAll();
+        List<CourseResponse> fetchAllCourseResponse = fetchAllCourse
+                .stream()
+                .map(CourseMapper::mapToCourseResponse)
+                .collect(Collectors.toList());
+        Collections.sort(fetchAllCourseResponse, Comparator.comparing(CourseResponse::getCourseCode,Collections.reverseOrder()));
+        int min = pageNo*pageSize;
+        int max = Math.max(pageSize*(pageNo +1),fetchAllCourseResponse.size());
+        PageRequest pageRequest = PageRequest.of(pageNo,pageSize, Sort.Direction.DESC,sortBy);
+        return  new PageImpl<>(fetchAllCourseResponse.subList(min,max),pageRequest,fetchAllCourseResponse.size());
     }
 
 
