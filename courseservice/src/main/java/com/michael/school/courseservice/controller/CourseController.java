@@ -4,6 +4,7 @@ import com.michael.school.courseservice.dto.request.CourseRequestDto;
 import com.michael.school.courseservice.dto.response.CourseResponse;
 import com.michael.school.courseservice.services.CourseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +61,18 @@ public class CourseController {
 
         return new ResponseEntity<>(courseResponse, HttpStatus.CREATED);
     }
+    @GetMapping("view/course/pagination")
+    private ResponseEntity <Page<CourseResponse>> viewCourseByPagination(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                                         @RequestParam(defaultValue = "16")Integer pageSize,
+                                                                         @RequestParam(defaultValue = "sortBy") String sortBy
+
+                                                                   ){
+
+       Page<CourseResponse> courseResponse = courseService.viewAllPaginatedCourse(pageNo,pageSize,sortBy);
+
+        return new ResponseEntity<>(courseResponse, HttpStatus.CREATED);
+    }
+
 
 
 

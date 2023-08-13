@@ -16,10 +16,8 @@ public interface CourseClient {
 
         @GetMapping("/view/course/{courseId}")
       public ResponseEntity<CourseResponse>  getCourseByTeacherId(@PathVariable("courseId") Long courseId);
-
-
-    @GetMapping("/view/all/courses")
-    public ResponseEntity <List<CourseResponse>> viewAllCourses();
+        @GetMapping("/view/all/courses")
+       public ResponseEntity <List<CourseResponse>> viewAllCourses();
 
 
 
