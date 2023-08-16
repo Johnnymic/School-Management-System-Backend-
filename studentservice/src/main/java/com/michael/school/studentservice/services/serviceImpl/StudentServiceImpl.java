@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -29,9 +32,18 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     private final RestTemplate restTemplate;
-    private final WebClient webClient;
+//    private final WebClient webClient;
+
+
 
     private  final ModelMapper modelMapper;
+
+    private final DiscoveryClient discoveryClient;
+
+
+   private final LoadBalancerClient client;
+
+
 
 
 
@@ -58,19 +70,33 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new StudentNotFoundException("student not found"));
 
         StudentResponse studentResponse = modelMapper.map(student,StudentResponse.class);
-        CourseResponse courseResponseMono = webClient
-                .get()
-                .uri("http://localhost:8081/api/v1/course/view/course/{id}", id)
-                .retrieve()
-                .bodyToMono(CourseResponse.class)
-                .block();
-        System.out.println(courseResponseMono);
+        CourseResponse courseResponseMono = callingCourseService(id);
+//        CourseResponse courseResponseMono = webClient
+//                .get()
+//                .uri("http://localhost:8081/api/v1/course/view/course/{id}", id)
+//                .retrieve()
+//                .bodyToMono(CourseResponse.class)
+//                .block();
+//        System.out.println(courseResponseMono);
         log.info("course :" + courseResponseMono);
         studentResponse.setCourseResponse(courseResponseMono);
         return studentResponse;
     }
 
+    private CourseResponse callingCourseService(Long id) {
+        //get the me the details of the ip and the port number of for the course service
 
+
+     List<ServiceInstance> instances=   discoveryClient.getInstances("course-service");
+      String url =   instances.get(0).getUri().toString();
+      String contextRoot = instances.get(0).getMetadata().get("configPath");
+        System.out.println("url {}" + url);
+
+
+
+      return restTemplate.getForObject(url + "/api/v1/course/view/course/{id}" , CourseResponse.class);
+
+    }
 
 
 }
