@@ -21,35 +21,25 @@ public class CourseController {
 
     @PostMapping("/add/new/course")
     private ResponseEntity<CourseResponse> addNewCourse(@RequestBody CourseRequestDto courseRequestDto){
-
         CourseResponse courseResponse = courseService.addNewCourse(courseRequestDto);
-
         return new ResponseEntity<>(courseResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/view/all/courses")
     private ResponseEntity <List<CourseResponse>> viewAllCourses(){
-
         List<CourseResponse> courseResponse = courseService.viewAllRegisterCourse();
-
         return new ResponseEntity<>(courseResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/view/course/{courseId}")
-
     private ResponseEntity <CourseResponse> viewAllCourses(@PathVariable("courseId") Long courseId){
-
         CourseResponse courseResponse = courseService.viewRegisterCourse(courseId);
-
         return new ResponseEntity<>(courseResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/edit/course/{courseId}")
-
     private ResponseEntity <CourseResponse> updateRegisterCourse(@PathVariable("courseId") Long courseId, @RequestBody CourseRequestDto courseRequestDto){
-
         CourseResponse courseResponse = courseService.updateRegisterCourse(courseId,courseRequestDto);
-
         return new ResponseEntity<>(courseResponse, HttpStatus.CREATED);
     }
 
