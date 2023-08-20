@@ -13,12 +13,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/student")
-public class
-StudentController {
+public class StudentController {
 
     private  final StudentService studentService;
 
-    @PostMapping
+    @PostMapping("/add/student")
     private ResponseEntity<StudentResponse> addNewStudent(@RequestBody StudentRequest studentRequest){
         StudentResponse studentRequests =  studentService.addNewStudent(studentRequest);
        return new ResponseEntity<>(studentRequests, HttpStatus.CREATED);
@@ -38,5 +37,7 @@ StudentController {
         return new ResponseEntity<>(studentProfile, HttpStatus.OK);
 
     }
+
+
 
 }
