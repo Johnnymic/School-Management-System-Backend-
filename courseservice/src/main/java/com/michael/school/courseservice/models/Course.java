@@ -2,6 +2,8 @@ package com.michael.school.courseservice.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Subselect;
+import org.hibernate.annotations.Synchronize;
 
 @Entity
 @AllArgsConstructor
@@ -26,4 +28,7 @@ public class Course {
 
 
 
+
 }
+
+
