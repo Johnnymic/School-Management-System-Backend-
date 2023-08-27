@@ -21,6 +21,7 @@
         <module>security-service</module>
         <module>teacherservice</module>
         <module>course-service</module>
+        <module>department-service</module>
     </modules>
 
 </project>
