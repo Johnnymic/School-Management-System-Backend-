@@ -22,6 +22,7 @@
         <module>teacherservice</module>
         <module>course-service</module>
         <module>department-service</module>
+        <module>Opt-service</module>
     </modules>
 
 </project>
